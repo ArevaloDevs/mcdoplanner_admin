@@ -8,260 +8,233 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --bg-image: url("mcdo_cover.png"); /* CHANGE IMAGE PATH IF NEEDED */
-}
+:root { --bg-image: url("mcdo_cover.png"); }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    min-height: 100vh;
+body{
+    margin:0;
+    font-family:Roboto,sans-serif;
     background:
-        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-        var(--bg-image) no-repeat center / cover;
-    display: flex;
-    flex-direction: column;
+      linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+      var(--bg-image) center/cover no-repeat;
 }
 
-/* HEADER */
-.top-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 30px;
-    background: rgba(0,0,0,0.65);
-    color: #fff;
+header{
+    background:rgba(0,0,0,.65);
+    color:#fff;
+    padding:16px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.header-left {
-    font-weight: 700;
-    font-size: 1.2rem;
+.home-btn{
+    background:#f2c94c;
+    color:#333;
+    padding:8px 18px;
+    border-radius:20px;
+    text-decoration:none;
+    font-weight:700;
 }
 
-.home-btn {
-    background: #f2c94c;
-    color: #333;
-    padding: 8px 18px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: 700;
+main{
+    max-width:1200px;
+    margin:25px auto;
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    justify-content:center;
 }
 
-/* MAIN */
-main {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 25px auto;
-    gap: 20px;
-    justify-content: center;
+.panel{
+    background:rgba(255,255,255,.95);
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.form-container,
-.calendar-container {
-    background: rgba(255,255,255,0.95);
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+.form-panel{flex:1 1 350px;max-width:400px;}
+.calendar-panel{flex:2 1 600px;}
+
+form{display:flex;flex-direction:column;gap:12px;}
+label{font-weight:700;color:#c62828;}
+input,select,textarea{
+    padding:10px;border-radius:8px;border:2px solid #f2c94c;
 }
 
-.form-container {
-    flex: 1 1 350px;
-    max-width: 400px;
+button{
+    background:#f2c94c;border:none;padding:12px;
+    font-weight:700;border-radius:8px;cursor:pointer;
 }
 
-.calendar-container {
-    flex: 2 1 600px;
+#calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
 }
 
-/* FORM */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+.day-header{
+    background:#c62828;color:#fff;
+    text-align:center;padding:8px;border-radius:8px;
+    font-weight:700;
 }
 
-label {
-    font-weight: 700;
-    color: #c62828;
+.day{
+    background:#fff;border-radius:12px;
+    padding:8px;min-height:135px;
+    display:flex;flex-direction:column;
 }
 
-input, select, textarea {
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid #f2c94c;
+.slot{
+    font-size:.7rem;
+    margin-top:4px;
+    padding:5px;border-radius:6px;
+    font-weight:700;
 }
 
-button {
-    background: #f2c94c;
-    border: none;
-    padding: 12px;
-    font-weight: 700;
-    border-radius: 8px;
-    cursor: pointer;
-}
+.available{background:#e8f5e9;color:#2e7d32;}
+.party{background:#fdecea;color:#b71c1c;}
+.business{background:#e3f2fd;color:#0d47a1;}
+.blocked{background:#cfcfcf;color:#555;}
 
-/* CALENDAR */
-#calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 12px;
-}
-
-.day-header {
-    background: #c62828;
-    color: white;
-    text-align: center;
-    padding: 8px;
-    border-radius: 8px;
-    font-weight: 700;
-}
-
-.day {
-    background: #fff;
-    border-radius: 12px;
-    padding: 8px;
-    min-height: 130px;
-    display: flex;
-    flex-direction: column;
-}
-
-.today { border: 2px solid #c62828; }
-
-.past {
-    background: #eee;
-    color: #aaa;
-    pointer-events: none;
-}
-
-.slot {
-    font-size: 0.7rem;
-    padding: 5px;
-    margin-top: 4px;
-    border-radius: 6px;
-    font-weight: 700;
-}
-
-.available { background: #e8f5e9; color: #2e7d32; }
-.booked-party { background: #fdecea; color: #b71c1c; }
-.booked-business { background: #e3f2fd; color: #0d47a1; }
-.blocked { background: #ccc; color: #666; }
-
-/* RESPONSIVE */
-@media (max-width: 992px) {
-    main { flex-direction: column; }
+@media(max-width:992px){
+    main{flex-direction:column;}
 }
 </style>
 </head>
 
 <body>
 
-<header class="top-header">
-    <div class="header-left">🍔 MCDONALD'S EDSA CALOOCAN - ADMIN PLANNER</div>
-    <a href="https://sites.google.com/view/mcdoedsacaloocan" class="home-btn">Home</a>
+<header>
+    <div>🍔 MCDONALD'S EDSA CALOOCAN – ADMIN PLANNER</div>
+    <a class="home-btn" href="#">Home</a>
 </header>
 
 <main>
 
-<div class="form-container">
+<div class="panel form-panel">
 <form id="eventForm">
     <label>Date</label>
     <input type="date" id="date" required>
 
-    <label>Time</label>
-    <select id="time" required>
-        <option value="06:00">6:00 AM</option>
-        <option value="09:00">9:00 AM</option>
-        <option value="14:00">2:00 PM</option>
-        <option value="17:00">5:00 PM</option>
-        <option value="20:00">8:00 PM</option>
-    </select>
-
     <label>Event Type</label>
-    <select id="type" required>
+    <select id="type">
         <option value="Party">Party (1.5 hrs)</option>
         <option value="Business">Business Meeting (2 hrs)</option>
     </select>
+
+    <label>Time</label>
+    <select id="time"></select>
 
     <textarea id="desc" placeholder="Description"></textarea>
     <button>Add Event</button>
 </form>
 </div>
 
-<div class="calendar-container">
+<div class="panel calendar-panel">
 <div id="calendar"></div>
 </div>
 
 </main>
 
 <script>
-const slots = ["06:00","09:00","14:00","17:00","20:00"];
-const durations = { Party: 1.5, Business: 2 };
-let current = new Date();
+const PARTY_SLOTS=[
+ {start:"06:00",end:"07:30"},
+ {start:"09:00",end:"10:30"},
+ {start:"14:00",end:"15:30"},
+ {start:"17:00",end:"18:30"},
+ {start:"20:00",end:"21:30"},
+];
 
-const load = () => JSON.parse(localStorage.getItem("events") || "{}");
-const save = e => localStorage.setItem("events", JSON.stringify(e));
-
-function overlaps(start1, dur1, start2, dur2){
-    const s1 = parseInt(start1.replace(":",""));
-    const e1 = s1 + dur1 * 100;
-    const s2 = parseInt(start2.replace(":",""));
-    const e2 = s2 + dur2 * 100;
-    return Math.max(s1,s2) < Math.min(e1,e2);
+function generateBusinessSlots(){
+ let slots=[];
+ for(let h=6;h<24;h++){
+   for(let m of [0,30]){
+     let sh=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+     let eh=new Date(`1970-01-01T${sh}:00`);
+     eh.setMinutes(eh.getMinutes()+120);
+     if(eh.getHours()<24 || (eh.getHours()==0 && eh.getMinutes()==0))
+       slots.push({start:sh,end:eh.toTimeString().slice(0,5)});
+   }
+ }
+ return slots;
 }
 
-document.getElementById("eventForm").onsubmit = e => {
-    e.preventDefault();
-    const d = date.value;
-    const t = time.value;
-    const ty = type.value;
-    const ev = load();
-    if(!ev[d]) ev[d]=[];
+function toMin(t){let[a,b]=t.split(":");return +a*60+ +b;}
+function overlap(a,b,c,d){return Math.max(a,c)<Math.min(b,d);}
 
-    for(let x of ev[d]){
-        if(overlaps(t,durations[ty],x.time,durations[x.type])){
-            alert("Time conflict detected!");
-            return;
-        }
-    }
+function load(){return JSON.parse(localStorage.getItem("events")||"{}");}
+function save(e){localStorage.setItem("events",JSON.stringify(e));}
 
-    ev[d].push({time:t,type:ty,desc:desc.value});
-    save(ev);
-    render();
-    e.target.reset();
+const timeSel=document.getElementById("time");
+const typeSel=document.getElementById("type");
+
+function refreshTimes(){
+ timeSel.innerHTML="";
+ let slots=typeSel.value==="Party"?PARTY_SLOTS:generateBusinessSlots();
+ slots.forEach(s=>{
+   let o=document.createElement("option");
+   o.value=`${s.start}-${s.end}`;
+   o.textContent=`${s.start} – ${s.end}`;
+   timeSel.appendChild(o);
+ });
+}
+typeSel.onchange=refreshTimes;
+refreshTimes();
+
+document.getElementById("eventForm").onsubmit=e=>{
+ e.preventDefault();
+ let d=date.value;
+ let [s,eT]=time.value.split("-");
+ let type=typeSel.value;
+ let ev=load();
+ if(!ev[d])ev[d]=[];
+
+ let sM=toMin(s), eM=toMin(eT);
+
+ for(let x of ev[d]){
+   if(overlap(sM,eM,toMin(x.start),toMin(x.end))){
+     alert("Time conflict with existing event!");
+     return;
+   }
+ }
+ ev[d].push({start:s,end:eT,type});
+ save(ev);
+ render();
+ e.target.reset();
+ refreshTimes();
 };
 
 function render(){
-    const cal = document.getElementById("calendar");
-    cal.innerHTML="";
-    const y=current.getFullYear(), m=current.getMonth();
-    const days=new Date(y,m+1,0).getDate();
-    const start=new Date(y,m,1).getDay();
-    ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
-        cal.innerHTML+=`<div class="day-header">${d}</div>`;
-    });
-    for(let i=0;i<start;i++) cal.innerHTML+=`<div class="day"></div>`;
-    const ev=load();
+ const cal=document.getElementById("calendar");
+ cal.innerHTML="";
+ let now=new Date();
+ let y=now.getFullYear(),m=now.getMonth();
+ let days=new Date(y,m+1,0).getDate();
+ let start=new Date(y,m,1).getDay();
+ ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
+   cal.innerHTML+=`<div class="day-header">${d}</div>`;
+ });
+ for(let i=0;i<start;i++)cal.innerHTML+=`<div></div>`;
+ let ev=load();
 
-    for(let d=1;d<=days;d++){
-        const dateKey=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-        let html=`<div class="day"><strong>${d}</strong>`;
-        slots.forEach(s=>{
-            let status="available";
-            let label="Available";
-            if(ev[dateKey]){
-                ev[dateKey].forEach(e=>{
-                    if(overlaps(s,1.5,e.time,durations[e.type])){
-                        status = e.type==="Business"?"blocked":"booked-party";
-                        label = e.type;
-                    }
-                });
-            }
-            html+=`<div class="slot ${status}">${s} - ${label}</div>`;
-        });
-        html+="</div>";
-        cal.innerHTML+=html;
-    }
+ for(let d=1;d<=days;d++){
+   let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+   let html=`<div class="day"><strong>${d}</strong>`;
+   PARTY_SLOTS.forEach(p=>{
+     let cls="available",lbl="Available";
+     if(ev[key]){
+       ev[key].forEach(e=>{
+         if(overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
+           cls=e.type==="Business"?"blocked":"party";
+           lbl=e.type;
+         }
+       });
+     }
+     html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
+   });
+   html+="</div>";
+   cal.innerHTML+=html;
+ }
 }
 render();
 </script>
