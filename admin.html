@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCDONALD'S EDSA CALOOCAN | Admin Planner</title>
+<title>MCDONALD'S EDSA CALOOCAN | Event Planner</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -16,6 +16,7 @@ font-family:Roboto,sans-serif;
 background:
 linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
 var(--bg-image) center/cover no-repeat;
+min-height:100vh;
 }
 
 header{
@@ -37,14 +38,21 @@ font-weight:700;
 }
 
 main{
-max-width:1200px;
+max-width:1300px;
 margin:25px auto;
-display:flex;
+display:grid;
+grid-template-columns:360px 1fr;
 gap:20px;
-flex-wrap:wrap;
-justify-content:center;
+padding:0 15px;
 }
 
+@media(max-width:900px){
+main{
+grid-template-columns:1fr;
+}
+}
+
+/* ===== PANELS ===== */
 .panel{
 background:rgba(255,255,255,.95);
 padding:22px;
@@ -52,27 +60,24 @@ border-radius:16px;
 box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.form-panel{flex:1 1 350px;max-width:420px;}
-.calendar-panel{flex:2 1 600px;}
-
+/* ===== FORM ===== */
 form{display:flex;flex-direction:column;gap:12px;}
 label{font-weight:700;color:#c62828;}
-
 input,select,textarea{
 padding:10px;
 border-radius:8px;
 border:2px solid #f2c94c;
 }
-
 button{
 background:#f2c94c;
 border:none;
 padding:12px;
 font-weight:700;
-border-radius:8px;
+border-radius:10px;
 cursor:pointer;
 }
 
+/* ===== CALENDAR ===== */
 #calendar{
 display:grid;
 grid-template-columns:repeat(7,1fr);
@@ -83,7 +88,7 @@ gap:10px;
 background:#c62828;
 color:#fff;
 text-align:center;
-padding:8px;
+padding:10px 0;
 border-radius:8px;
 font-weight:700;
 }
@@ -92,7 +97,7 @@ font-weight:700;
 background:#fff;
 border-radius:12px;
 padding:8px;
-min-height:150px;
+min-height:160px;
 display:flex;
 flex-direction:column;
 }
@@ -117,30 +122,26 @@ padding:6px;
 border-radius:6px;
 font-size:.75rem;
 font-weight:700;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-.event span{
-cursor:pointer;
-margin-left:6px;
-font-size:.65rem;
-}
-
-@media(max-width:992px){
-main{flex-direction:column;}
-}
+.event span{cursor:pointer;font-size:.8rem;margin-left:6px;}
 </style>
 </head>
 
 <body>
 
 <header>
-<div>🍔 MCDONALD'S EDSA CALOOCAN – ADMIN PLANNER</div>
-<a class="home-btn" href="#">Home</a>
+<div>🍔 MCDONALD'S EDSA CALOOCAN</div>
+<a href="#" class="home-btn">Home</a>
 </header>
 
 <main>
 
-<div class="panel form-panel">
+<!-- ===== FORM ===== -->
+<div class="panel">
 <form id="eventForm">
 <label>Date</label>
 <input type="date" id="date" required>
@@ -157,15 +158,17 @@ main{flex-direction:column;}
 <option value="Pencil">Pencil Booking</option>
 </select>
 
-<label>Time</label>
+<label>Time Slot</label>
 <select id="time"></select>
 
-<textarea id="desc" placeholder="Description"></textarea>
+<textarea id="desc" placeholder="Description (optional)"></textarea>
+
 <button id="submitBtn">Add Event</button>
 </form>
 </div>
 
-<div class="panel calendar-panel">
+<!-- ===== CALENDAR ===== -->
+<div class="panel">
 <div id="calendar"></div>
 </div>
 
@@ -180,33 +183,31 @@ const PARTY_SLOTS=[
 {start:"20:00",end:"21:30"}
 ];
 
-function genBusinessSlots(){
+function businessSlots(){
 let s=[];
 for(let h=6;h<24;h++){
 for(let m of [0,30]){
-let sh=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-let d=new Date(`1970-01-01T${sh}`);
+let st=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+let d=new Date(`1970-01-01T${st}`);
 d.setMinutes(d.getMinutes()+120);
-if(d.getHours()<24||d.getMinutes()==0)
-s.push({start:sh,end:d.toTimeString().slice(0,5)});
+if(d.getHours()<24 || d.getMinutes()==0)
+s.push({start:st,end:d.toTimeString().slice(0,5)});
 }}
 return s;
 }
 
-const toMin=t=>+t.split(":")[0]*60+ +t.split(":")[1];
+const toMin=t=>+t.split(":")[0]*60 + +t.split(":")[1];
 const overlap=(a,b,c,d)=>Math.max(a,c)<Math.min(b,d);
 
 const load=()=>JSON.parse(localStorage.getItem("events")||"{}");
 const save=e=>localStorage.setItem("events",JSON.stringify(e));
 
 let editing=null;
-
-const timeSel=document.getElementById("time");
-const typeSel=document.getElementById("type");
+const timeSel=time, typeSel=type;
 
 function refreshTimes(){
 timeSel.innerHTML="";
-let slots=typeSel.value==="Party"?PARTY_SLOTS:genBusinessSlots();
+let slots=typeSel.value==="Party"?PARTY_SLOTS:businessSlots();
 slots.forEach(s=>{
 let o=document.createElement("option");
 o.value=`${s.start}-${s.end}`;
@@ -219,37 +220,45 @@ refreshTimes();
 
 eventForm.onsubmit=e=>{
 e.preventDefault();
+
 let d=date.value;
-let [s,eT]=time.value.split("-");
-let type=type.value;
-let status=document.getElementById("status").value;
-let ev=load();
-if(!ev[d])ev[d]=[];
+let [st,en]=time.value.split("-");
+let evType=type.value;
+let stat=status.value;
+let text=desc.value;
+
+let events=load();
+if(!events[d]) events[d]=[];
 
 if(editing){
-ev[d]=ev[d].filter(x=>x.id!==editing);
+events[d]=events[d].filter(x=>x.id!==editing);
 editing=null;
 submitBtn.textContent="Add Event";
 }
 
-let sM=toMin(s),eM=toMin(eT);
-
-if(status==="Confirmed"){
-for(let x of ev[d]){
+if(stat==="Confirmed"){
+for(let x of events[d]){
 if(x.status==="Confirmed" &&
-overlap(sM,eM,toMin(x.start),toMin(x.end))){
-alert("Time conflict with confirmed event");
+overlap(toMin(st),toMin(en),toMin(x.start),toMin(x.end))){
+alert("❌ Time slot already blocked.");
 return;
 }}
 }
 
-ev[d].push({
+events[d].push({
 id:Date.now(),
-start:s,end:eT,type,status,
-desc:desc.value
+start:st,end:en,
+type:evType,status:stat,desc:text
 });
 
-save(ev);
+save(events);
+
+alert(
+stat==="Confirmed"
+? "✅ Event CONFIRMED successfully!"
+: "✏️ Event saved as PENCIL BOOKING"
+);
+
 eventForm.reset();
 refreshTimes();
 render();
@@ -260,12 +269,14 @@ calendar.innerHTML="";
 let now=new Date(),y=now.getFullYear(),m=now.getMonth();
 let days=new Date(y,m+1,0).getDate();
 let start=new Date(y,m,1).getDay();
+
 ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
 calendar.innerHTML+=`<div class="day-header">${d}</div>`;
 });
-for(let i=0;i<start;i++)calendar.innerHTML+=`<div></div>`;
 
-let ev=load();
+for(let i=0;i<start;i++) calendar.innerHTML+=`<div></div>`;
+
+let events=load();
 
 for(let d=1;d<=days;d++){
 let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
@@ -273,8 +284,8 @@ let html=`<div class="day"><strong>${d}</strong>`;
 
 PARTY_SLOTS.forEach(p=>{
 let cls="available",lbl="Available";
-if(ev[key]){
-ev[key].forEach(e=>{
+if(events[key]){
+events[key].forEach(e=>{
 if(e.status==="Confirmed" &&
 overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
 cls=e.type==="Business"?"blocked":"party";
@@ -285,13 +296,15 @@ lbl=e.type;
 html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
 });
 
-if(ev[key]){
-ev[key].forEach(e=>{
+if(events[key]){
+events[key].forEach(e=>{
 html+=`
 <div class="event ${e.status==="Pencil"?"pencil":(e.type==="Business"?"business":"party")}">
-${e.start}-${e.end} ${e.type} (${e.status})
+${e.start}-${e.end} ${e.type}
+<div>
 <span onclick="editEvent('${key}',${e.id})">✏️</span>
 <span onclick="delEvent('${key}',${e.id})">🗑</span>
+</div>
 </div>`;
 });
 }
@@ -302,8 +315,7 @@ calendar.innerHTML+=html;
 }
 
 window.editEvent=(d,id)=>{
-let ev=load();
-let e=ev[d].find(x=>x.id===id);
+let e=load()[d].find(x=>x.id===id);
 date.value=d;
 type.value=e.type;
 status.value=e.status;
@@ -316,9 +328,9 @@ submitBtn.textContent="Update Event";
 
 window.delEvent=(d,id)=>{
 if(confirm("Delete this event?")){
-let ev=load();
-ev[d]=ev[d].filter(x=>x.id!==id);
-save(ev);
+let events=load();
+events[d]=events[d].filter(x=>x.id!==id);
+save(events);
 render();
 }
 };
