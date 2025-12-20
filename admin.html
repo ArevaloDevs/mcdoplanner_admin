@@ -3,253 +3,447 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MCDONALD'S EDSA CALOOCAN | Event Planner</title>
+<title>MCDONALD'S EDSA CALOOCAN | Admin Planner</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{--bg-image:url("mcdo_cover.png");}
-body{
-margin:0;font-family:Roboto,sans-serif;
-background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--bg-image) center/cover no-repeat;
-min-height:100vh;
+:root {
+    --bg-image: url("mcdo_cover.png"); /* 🔴 Change to your image path */
 }
-header{
-background:rgba(0,0,0,.65);color:#fff;padding:16px 30px;
-display:flex;justify-content:space-between;align-items:center;
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+        var(--bg-image) no-repeat center / cover;
+    display: flex;
+    flex-direction: column;
+    color: #333;
 }
-.home-btn{background:#f2c94c;color:#333;padding:8px 18px;border-radius:20px;text-decoration:none;font-weight:700;}
-main{
-max-width:1300px;margin:25px auto;
-display:grid;grid-template-columns:360px 1fr;gap:20px;padding:0 15px;
+
+/* ===== HEADER ===== */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 30px;
+    background: rgba(0,0,0,0.65);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    flex-shrink: 0;
 }
-@media(max-width:900px){main{grid-template-columns:1fr;}}
-.panel{
-background:rgba(255,255,255,.95);padding:22px;border-radius:16px;
-box-shadow:0 10px 30px rgba(0,0,0,.25);
+
+.header-left {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
-form{display:flex;flex-direction:column;gap:12px;}
-label{font-weight:700;color:#c62828;}
-input,select,textarea{padding:10px;border-radius:8px;border:2px solid #f2c94c;}
-button{background:#f2c94c;border:none;padding:12px;font-weight:700;border-radius:10px;cursor:pointer;}
-#calendar-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
-#calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
-.day-header{
-background:#c62828;color:#fff;text-align:center;padding:10px 0;border-radius:8px;font-weight:700;
+
+.home-btn {
+    text-decoration: none;
+    background: #f2c94c;
+    color: #333;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: all 0.25s ease;
 }
-.day{
-background:#fff;border-radius:12px;padding:8px;min-height:160px;display:flex;flex-direction:column;
+
+.home-btn:hover {
+    background: #e0b842;
+    transform: translateY(-1px);
 }
-.past{background:#e0e0e0;color:#999;pointer-events:none;}
-.slot{
-font-size:.7rem;margin-top:4px;padding:6px;border-radius:6px;font-weight:700;
+
+/* ===== MAIN ===== */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 25px auto 40px;
+    gap: 20px;
 }
-.available{background:#e8f5e9;color:#2e7d32;}
-.party{background:#fdecea;color:#b71c1c;}
-.business{background:#e3f2fd;color:#0d47a1;}
-.blocked{background:#cfcfcf;color:#555;}
-.pencil{background:#fff3cd;color:#856404;}
-.event{
-margin-top:6px;padding:6px;border-radius:6px;font-size:.75rem;font-weight:700;
-display:flex;justify-content:space-between;align-items:center;
+
+/* Form container */
+.form-container {
+    flex: 1 1 350px;
+    min-width: 280px;
+    max-width: 400px;
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
-.event span{cursor:pointer;margin-left:6px;}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-weight: 700;
+    color: #c62828;
+    font-size: 0.95rem;
+}
+
+input, select, textarea {
+    padding: 12px;
+    border: 2px solid #f2c94c;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+button {
+    background: #f2c94c;
+    color: #333;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #e0b842;
+    transform: translateY(-1px);
+}
+
+#message {
+    margin-top: 10px;
+    color: #2e7d32;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Calendar container */
+.calendar-container {
+    flex: 2 1 600px;
+    min-width: 300px;
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    overflow-x: auto;
+}
+
+/* Calendar controls */
+#calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#calendar-controls button {
+    background: #f2c94c;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    flex: 1 1 100px;
+}
+
+#monthYear {
+    font-size: 1.6rem;
+    color: #c62828;
+    font-weight: 700;
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+/* Calendar grid */
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* fixed 7 columns */
+    gap: 12px;
+}
+
+.day-header {
+    text-align: center;
+    font-weight: 700;
+    padding: 10px 0;
+    background: #c62828;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.day {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px;
+    min-height: 135px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.today {
+    border: 2px solid #c62828;
+    background: #fff8e1;
+}
+
+.available {
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 0.75rem;
+    padding: 6px;
+    border-radius: 6px;
+    margin-top: 6px;
+    font-weight: 600;
+}
+
+.booked {
+    background: #fdecea;
+    color: #b71c1c;
+    font-size: 0.75rem;
+    padding: 6px;
+    border-radius: 6px;
+    margin-top: 6px;
+    font-weight: 700;
+}
+
+/* Past days */
+.past {
+    background: #f1f1f1;
+    color: #999;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.past::after {
+    content: "PAST";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.6rem;
+    background: #bdbdbd;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.past .available,
+.past .booked {
+    background: #e0e0e0;
+    color: #9e9e9e;
+}
+
+.edit-btn, .delete-btn {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 0.65rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.edit-btn { background: #ffd54f; color: #333; }
+.edit-btn:hover { background: #ffc107; }
+
+.delete-btn { background: #e57373; color: #fff; }
+.delete-btn:hover { background: #d32f2f; }
+
+/* ===== MOBILE & TABLET ===== */
+@media (max-width: 992px) {
+    main { flex-direction: column; }
+    .form-container, .calendar-container { width: 100%; max-width: none; }
+}
 </style>
 </head>
 
 <body>
-
-<header>
-<div>🍔 MCDONALD'S EDSA CALOOCAN</div>
-<a href="#" class="home-btn">Home</a>
+<header class="top-header">
+    <div class="header-left">🍔 MCDONALD'S EDSA CALOOCAN - EVENT PLANNER (Admin)</div>
+    <a href="https://sites.google.com/view/mcdoedsacaloocan?usp=sharing" class="home-btn">Home</a>
 </header>
 
 <main>
+    <div class="form-container">
+        <form id="eventForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" required>
 
-<div class="panel">
-<form id="eventForm">
-<label>Date</label>
-<input type="date" id="date" required>
+            <label for="slot">Time Slot:</label>
+            <select id="slot" required>
+                <option value="06:00-07:30">6:00–7:30 AM</option>
+                <option value="09:00-10:30">9:00–10:30 AM</option>
+                <option value="14:00-15:30">2:00–3:30 PM</option>
+                <option value="17:00-18:30">5:00–6:30 PM</option>
+                <option value="20:00-21:30">8:00–9:30 PM</option>
+            </select>
 
-<label>Event Type</label>
-<select id="type">
-<option value="Party">Party (1.5 hrs)</option>
-<option value="Business">Business Meeting (2 hrs)</option>
-</select>
+            <label for="type">Event Type:</label>
+            <select id="type" required>
+                <option value="Party">Party</option>
+                <option value="Business Meeting">Business Meeting</option>
+                <option value="Other">Other</option>
+            </select>
 
-<label>Booking Status</label>
-<select id="status">
-<option value="Confirmed">Confirmed</option>
-<option value="Pencil">Pencil Booking</option>
-</select>
+            <label for="description">Description:</label>
+            <textarea id="description" placeholder="Event details..."></textarea>
 
-<label>Time Slot</label>
-<select id="time"></select>
+            <button type="submit" id="addBtn">Add Event</button>
+        </form>
+        <div id="message"></div>
+    </div>
 
-<textarea id="desc" placeholder="Description"></textarea>
-<button id="submitBtn">Add Event</button>
-</form>
-</div>
-
-<div class="panel">
-<div id="calendar-controls">
-<button id="prevMonth">Prev</button>
-<strong id="monthYear"></strong>
-<button id="nextMonth">Next</button>
-</div>
-<div id="calendar"></div>
-</div>
-
+    <div class="calendar-container">
+        <div id="calendar-controls">
+            <button id="prevMonth">Prev</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth">Next</button>
+        </div>
+        <div id="calendar"></div>
+    </div>
 </main>
 
 <script>
-const PARTY=[
-{start:"06:00",end:"07:30"},
-{start:"09:00",end:"10:30"},
-{start:"14:00",end:"15:30"},
-{start:"17:00",end:"18:30"},
-{start:"20:00",end:"21:30"}
-];
+let currentDate = new Date();
+let editingEvent = null;
 
-const toMin=t=>+t.split(":")[0]*60 + +t.split(":")[1];
-const overlap=(a,b,c,d)=>Math.max(a,c)<Math.min(b,d);
-const load=()=>JSON.parse(localStorage.getItem("events")||"{}");
-const save=e=>localStorage.setItem("events",JSON.stringify(e));
+function loadEvents() { return JSON.parse(localStorage.getItem('mcdonaldsEvents') || '{}'); }
+function saveEvents(events) { localStorage.setItem('mcdonaldsEvents', JSON.stringify(events)); }
 
-let current=new Date(), editing=null;
-
-function businessSlots(){
-let s=[];
-for(let h=6;h<24;h++){
-for(let m of [0,30]){
-let st=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-let d=new Date(`1970-01-01T${st}`);
-d.setMinutes(d.getMinutes()+120);
-if(d.getHours()<24 || d.getMinutes()==0)
-s.push({start:st,end:d.toTimeString().slice(0,5)});
-}}
-return s;
+function generateTimeSlots() {
+    return [
+        { key: "06:00-07:30", display: "6:00–7:30 AM" },
+        { key: "09:00-10:30", display: "9:00–10:30 AM" },
+        { key: "14:00-15:30", display: "2:00–3:30 PM" },
+        { key: "17:00-18:30", display: "5:00–6:30 PM" },
+        { key: "20:00-21:30", display: "8:00–9:30 PM" }
+    ];
 }
 
-function refreshTimes(){
-time.innerHTML="";
-(type.value==="Party"?PARTY:businessSlots()).forEach(s=>{
-let o=document.createElement("option");
-o.value=`${s.start}-${s.end}`;
-o.textContent=`${s.start} – ${s.end}`;
-time.appendChild(o);
-});
-}
-type.onchange=refreshTimes;
-refreshTimes();
+// Form submit (Add / Update)
+document.getElementById('eventForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const date = document.getElementById('date').value;
+    const slot = document.getElementById('slot').value;
+    const type = document.getElementById('type').value;
+    const description = document.getElementById('description').value;
 
-eventForm.onsubmit=e=>{
-e.preventDefault();
-let d=date.value;
-let today=new Date(); today.setHours(0,0,0,0);
-if(new Date(d)<today) return;
+    const events = loadEvents();
+    if (!events[date]) events[date] = {};
 
-let [st,en]=time.value.split("-");
-let events=load(); events[d]=events[d]||[];
+    if(editingEvent){
+        if(editingEvent.date !== date || editingEvent.slot !== slot){
+            delete events[editingEvent.date][editingEvent.slot];
+        }
+        editingEvent = null;
+        document.getElementById('addBtn').textContent = 'Add Event';
+    } else {
+        if(events[date][slot]){
+            document.getElementById('message').textContent = 'Time slot already booked!';
+            return;
+        }
+    }
 
-if(editing){
-events[d]=events[d].filter(x=>x.id!==editing);
-editing=null; submitBtn.textContent="Add Event";
-}
-
-if(status.value==="Confirmed"){
-for(let x of events[d]){
-if(x.status==="Confirmed" &&
-overlap(toMin(st),toMin(en),toMin(x.start),toMin(x.end))){
-alert("❌ Time slot blocked");
-return;
-}}
-}
-
-events[d].push({
-id:Date.now(),start:st,end:en,type:type.value,status:status.value,desc:desc.value
-});
-save(events);
-alert(status.value==="Confirmed"?"✅ Event CONFIRMED":"✏️ Pencil booking saved");
-eventForm.reset(); refreshTimes(); render();
-};
-
-function render(){
-calendar.innerHTML="";
-let y=current.getFullYear(),m=current.getMonth();
-monthYear.textContent=current.toLocaleString("default",{month:"long",year:"numeric"});
-let days=new Date(y,m+1,0).getDate();
-let start=new Date(y,m,1).getDay();
-let today=new Date(); today.setHours(0,0,0,0);
-
-["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
-calendar.innerHTML+=`<div class="day-header">${d}</div>`;
-});
-for(let i=0;i<start;i++) calendar.innerHTML+=`<div></div>`;
-
-let events=load();
-
-for(let d=1;d<=days;d++){
-let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-let past=new Date(key)<today;
-let html=`<div class="day ${past?"past":""}"><strong>${d}</strong>`;
-
-PARTY.forEach(p=>{
-let cls="available",lbl="Available";
-
-if(events[key]){
-events[key].forEach(e=>{
-if(overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
-if(e.status==="Confirmed"){
-cls=e.type==="Business"?"blocked":"party";
-lbl=e.type;
-}
-if(e.status==="Pencil"){
-cls="pencil";
-lbl="Pencil Booked";
-}
-}
-});
-}
-html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
+    events[date][slot] = { type, description };
+    saveEvents(events);
+    document.getElementById('message').textContent = 'Event saved successfully!';
+    e.target.reset();
+    renderCalendar();
 });
 
-if(events[key]&&!past){
-events[key].forEach(e=>{
-html+=`
-<div class="event ${e.status==="Pencil"?"pencil":(e.type==="Business"?"business":"party")}">
-${e.start}-${e.end} ${e.type}
-<div>
-<span onclick="editEvent('${key}',${e.id})">✏️</span>
-<span onclick="delEvent('${key}',${e.id})">🗑</span>
-</div>
-</div>`;
-});
-}
-html+="</div>";
-calendar.innerHTML+=html;
-}
+// Calendar render
+function renderCalendar(){
+    const year=currentDate.getFullYear();
+    const month=currentDate.getMonth();
+    const daysInMonth=new Date(year,month+1,0).getDate();
+    const firstDay=new Date(year,month,1).getDay();
+    const today=new Date(); today.setHours(0,0,0,0);
+
+    const calendar=document.getElementById('calendar');
+    calendar.innerHTML='';
+
+    document.getElementById('monthYear').textContent=`${currentDate.toLocaleString('default',{month:'long'})} ${year}`;
+
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{
+        const h=document.createElement('div');
+        h.className='day-header';
+        h.textContent=d;
+        calendar.appendChild(h);
+    });
+
+    for(let i=0;i<firstDay;i++){
+        const empty=document.createElement('div');
+        empty.className='day';
+        calendar.appendChild(empty);
+    }
+
+    const events=loadEvents();
+    const slots=generateTimeSlots();
+
+    for(let day=1;day<=daysInMonth;day++){
+        const dayDiv=document.createElement('div');
+        dayDiv.className='day';
+        const dateObj=new Date(year,month,day); dateObj.setHours(0,0,0,0);
+        if(dateObj<today) dayDiv.classList.add('past');
+        if(dateObj.getTime()===today.getTime()) dayDiv.classList.add('today');
+
+        dayDiv.innerHTML=`<strong>${day}</strong>`;
+        const dateKey=`${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const dayEvents=events[dateKey]||{};
+
+        slots.forEach(slot=>{
+            const slotDiv=document.createElement('div');
+
+            if(dayEvents[slot.key]){
+                slotDiv.className='booked';
+                slotDiv.textContent=`${slot.display} - ${dayEvents[slot.key].type}`;
+
+                if(!dayDiv.classList.contains('past')){
+                    const editBtn=document.createElement('span');
+                    editBtn.textContent='Edit';
+                    editBtn.className='edit-btn';
+                    editBtn.addEventListener('click',()=> {
+                        document.getElementById('date').value=dateKey;
+                        document.getElementById('slot').value=slot.key;
+                        document.getElementById('type').value=dayEvents[slot.key].type;
+                        document.getElementById('description').value=dayEvents[slot.key].description;
+                        document.getElementById('addBtn').textContent='Update Event';
+                        editingEvent={date:dateKey, slot:slot.key};
+                    });
+                    const deleteBtn=document.createElement('span');
+                    deleteBtn.textContent='Delete';
+                    deleteBtn.className='delete-btn';
+                    deleteBtn.addEventListener('click',()=> {
+                        if(confirm('Are you sure you want to delete this event?')){
+                            delete events[dateKey][slot.key];
+                            saveEvents(events);
+                            renderCalendar();
+                        }
+                    });
+                    slotDiv.appendChild(editBtn);
+                    slotDiv.appendChild(deleteBtn);
+                }
+            } else {
+                slotDiv.className='available';
+                slotDiv.textContent=`${slot.display} - Available`;
+            }
+            dayDiv.appendChild(slotDiv);
+        });
+        calendar.appendChild(dayDiv);
+    }
 }
 
-window.editEvent=(d,id)=>{
-let e=load()[d].find(x=>x.id===id);
-date.value=d; type.value=e.type; status.value=e.status;
-refreshTimes(); time.value=`${e.start}-${e.end}`;
-desc.value=e.desc; editing=id;
-submitBtn.textContent="Update Event";
-};
-
-window.delEvent=(d,id)=>{
-if(confirm("Delete this event?")){
-let e=load(); e[d]=e[d].filter(x=>x.id!==id);
-save(e); render();
-}
-};
-
-prevMonth.onclick=()=>{current.setMonth(current.getMonth()-1);render();}
-nextMonth.onclick=()=>{current.setMonth(current.getMonth()+1);render();}
-render();
+renderCalendar();
+document.getElementById('prevMonth').addEventListener('click',()=>{currentDate.setMonth(currentDate.getMonth()-1); renderCalendar();});
+document.getElementById('nextMonth').addEventListener('click',()=>{currentDate.setMonth(currentDate.getMonth()+1); renderCalendar();});
 </script>
-
 </body>
 </html>
