@@ -19,6 +19,7 @@ var(--bg-image) center/cover no-repeat;
 min-height:100vh;
 }
 
+/* ===== HEADER ===== */
 header{
 background:rgba(0,0,0,.65);
 color:#fff;
@@ -37,6 +38,7 @@ text-decoration:none;
 font-weight:700;
 }
 
+/* ===== LAYOUT ===== */
 main{
 max-width:1300px;
 margin:25px auto;
@@ -47,9 +49,7 @@ padding:0 15px;
 }
 
 @media(max-width:900px){
-main{
-grid-template-columns:1fr;
-}
+main{grid-template-columns:1fr;}
 }
 
 /* ===== PANELS ===== */
@@ -78,6 +78,14 @@ cursor:pointer;
 }
 
 /* ===== CALENDAR ===== */
+#calendar-controls{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+gap:10px;
+}
+
 #calendar{
 display:grid;
 grid-template-columns:repeat(7,1fr);
@@ -100,6 +108,12 @@ padding:8px;
 min-height:160px;
 display:flex;
 flex-direction:column;
+}
+
+.past{
+background:#e0e0e0;
+color:#999;
+pointer-events:none;
 }
 
 .slot{
@@ -169,19 +183,33 @@ align-items:center;
 
 <!-- ===== CALENDAR ===== -->
 <div class="panel">
+<div id="calendar-controls">
+<button id="prevMonth">Prev</button>
+<strong id="monthYear"></strong>
+<button id="nextMonth">Next</button>
+</div>
 <div id="calendar"></div>
 </div>
 
 </main>
 
 <script>
-const PARTY_SLOTS=[
+const PARTY=[
 {start:"06:00",end:"07:30"},
 {start:"09:00",end:"10:30"},
 {start:"14:00",end:"15:30"},
 {start:"17:00",end:"18:30"},
 {start:"20:00",end:"21:30"}
 ];
+
+const toMin=t=>+t.split(":")[0]*60 + +t.split(":")[1];
+const overlap=(a,b,c,d)=>Math.max(a,c)<Math.min(b,d);
+
+const load=()=>JSON.parse(localStorage.getItem("events")||"{}");
+const save=e=>localStorage.setItem("events",JSON.stringify(e));
+
+let current=new Date();
+let editing=null;
 
 function businessSlots(){
 let s=[];
@@ -196,39 +224,27 @@ s.push({start:st,end:d.toTimeString().slice(0,5)});
 return s;
 }
 
-const toMin=t=>+t.split(":")[0]*60 + +t.split(":")[1];
-const overlap=(a,b,c,d)=>Math.max(a,c)<Math.min(b,d);
-
-const load=()=>JSON.parse(localStorage.getItem("events")||"{}");
-const save=e=>localStorage.setItem("events",JSON.stringify(e));
-
-let editing=null;
-const timeSel=time, typeSel=type;
-
 function refreshTimes(){
-timeSel.innerHTML="";
-let slots=typeSel.value==="Party"?PARTY_SLOTS:businessSlots();
-slots.forEach(s=>{
+time.innerHTML="";
+(type.value==="Party"?PARTY:businessSlots()).forEach(s=>{
 let o=document.createElement("option");
 o.value=`${s.start}-${s.end}`;
 o.textContent=`${s.start} – ${s.end}`;
-timeSel.appendChild(o);
+time.appendChild(o);
 });
 }
-typeSel.onchange=refreshTimes;
+type.onchange=refreshTimes;
 refreshTimes();
 
 eventForm.onsubmit=e=>{
 e.preventDefault();
-
 let d=date.value;
-let [st,en]=time.value.split("-");
-let evType=type.value;
-let stat=status.value;
-let text=desc.value;
+let today=new Date(); today.setHours(0,0,0,0);
+if(new Date(d)<today) return;
 
+let [st,en]=time.value.split("-");
 let events=load();
-if(!events[d]) events[d]=[];
+events[d]=events[d]||[];
 
 if(editing){
 events[d]=events[d].filter(x=>x.id!==editing);
@@ -236,11 +252,11 @@ editing=null;
 submitBtn.textContent="Add Event";
 }
 
-if(stat==="Confirmed"){
+if(status.value==="Confirmed"){
 for(let x of events[d]){
 if(x.status==="Confirmed" &&
 overlap(toMin(st),toMin(en),toMin(x.start),toMin(x.end))){
-alert("❌ Time slot already blocked.");
+alert("❌ Time slot blocked.");
 return;
 }}
 }
@@ -248,16 +264,15 @@ return;
 events[d].push({
 id:Date.now(),
 start:st,end:en,
-type:evType,status:stat,desc:text
+type:type.value,
+status:status.value,
+desc:desc.value
 });
 
 save(events);
-
-alert(
-stat==="Confirmed"
-? "✅ Event CONFIRMED successfully!"
-: "✏️ Event saved as PENCIL BOOKING"
-);
+alert(status.value==="Confirmed"
+? "✅ Event CONFIRMED"
+: "✏️ Pencil booking saved");
 
 eventForm.reset();
 refreshTimes();
@@ -266,23 +281,27 @@ render();
 
 function render(){
 calendar.innerHTML="";
-let now=new Date(),y=now.getFullYear(),m=now.getMonth();
+let y=current.getFullYear(),m=current.getMonth();
+monthYear.textContent=current.toLocaleString("default",{month:"long",year:"numeric"});
 let days=new Date(y,m+1,0).getDate();
 let start=new Date(y,m,1).getDay();
+let today=new Date(); today.setHours(0,0,0,0);
 
 ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
 calendar.innerHTML+=`<div class="day-header">${d}</div>`;
 });
-
 for(let i=0;i<start;i++) calendar.innerHTML+=`<div></div>`;
 
 let events=load();
 
 for(let d=1;d<=days;d++){
 let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-let html=`<div class="day"><strong>${d}</strong>`;
+let dateObj=new Date(key);
+let past=dateObj<today;
 
-PARTY_SLOTS.forEach(p=>{
+let html=`<div class="day ${past?"past":""}"><strong>${d}</strong>`;
+
+PARTY.forEach(p=>{
 let cls="available",lbl="Available";
 if(events[key]){
 events[key].forEach(e=>{
@@ -296,7 +315,7 @@ lbl=e.type;
 html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
 });
 
-if(events[key]){
+if(events[key] && !past){
 events[key].forEach(e=>{
 html+=`
 <div class="event ${e.status==="Pencil"?"pencil":(e.type==="Business"?"business":"party")}">
@@ -328,12 +347,15 @@ submitBtn.textContent="Update Event";
 
 window.delEvent=(d,id)=>{
 if(confirm("Delete this event?")){
-let events=load();
-events[d]=events[d].filter(x=>x.id!==id);
-save(events);
+let e=load();
+e[d]=e[d].filter(x=>x.id!==id);
+save(e);
 render();
 }
 };
+
+prevMonth.onclick=()=>{current.setMonth(current.getMonth()-1);render();}
+nextMonth.onclick=()=>{current.setMonth(current.getMonth()+1);render();}
 
 render();
 </script>
