@@ -9,139 +9,51 @@
 
 <style>
 :root{--bg-image:url("mcdo_cover.png");}
-
 body{
-margin:0;
-font-family:Roboto,sans-serif;
-background:
-linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-var(--bg-image) center/cover no-repeat;
+margin:0;font-family:Roboto,sans-serif;
+background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),var(--bg-image) center/cover no-repeat;
 min-height:100vh;
 }
-
-/* ===== HEADER ===== */
 header{
-background:rgba(0,0,0,.65);
-color:#fff;
-padding:16px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+background:rgba(0,0,0,.65);color:#fff;padding:16px 30px;
+display:flex;justify-content:space-between;align-items:center;
 }
-
-.home-btn{
-background:#f2c94c;
-color:#333;
-padding:8px 18px;
-border-radius:20px;
-text-decoration:none;
-font-weight:700;
-}
-
-/* ===== LAYOUT ===== */
+.home-btn{background:#f2c94c;color:#333;padding:8px 18px;border-radius:20px;text-decoration:none;font-weight:700;}
 main{
-max-width:1300px;
-margin:25px auto;
-display:grid;
-grid-template-columns:360px 1fr;
-gap:20px;
-padding:0 15px;
+max-width:1300px;margin:25px auto;
+display:grid;grid-template-columns:360px 1fr;gap:20px;padding:0 15px;
 }
-
-@media(max-width:900px){
-main{grid-template-columns:1fr;}
-}
-
-/* ===== PANELS ===== */
+@media(max-width:900px){main{grid-template-columns:1fr;}}
 .panel{
-background:rgba(255,255,255,.95);
-padding:22px;
-border-radius:16px;
+background:rgba(255,255,255,.95);padding:22px;border-radius:16px;
 box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
-
-/* ===== FORM ===== */
 form{display:flex;flex-direction:column;gap:12px;}
 label{font-weight:700;color:#c62828;}
-input,select,textarea{
-padding:10px;
-border-radius:8px;
-border:2px solid #f2c94c;
-}
-button{
-background:#f2c94c;
-border:none;
-padding:12px;
-font-weight:700;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* ===== CALENDAR ===== */
-#calendar-controls{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:15px;
-gap:10px;
-}
-
-#calendar{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:10px;
-}
-
+input,select,textarea{padding:10px;border-radius:8px;border:2px solid #f2c94c;}
+button{background:#f2c94c;border:none;padding:12px;font-weight:700;border-radius:10px;cursor:pointer;}
+#calendar-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;}
+#calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
 .day-header{
-background:#c62828;
-color:#fff;
-text-align:center;
-padding:10px 0;
-border-radius:8px;
-font-weight:700;
+background:#c62828;color:#fff;text-align:center;padding:10px 0;border-radius:8px;font-weight:700;
 }
-
 .day{
-background:#fff;
-border-radius:12px;
-padding:8px;
-min-height:160px;
-display:flex;
-flex-direction:column;
+background:#fff;border-radius:12px;padding:8px;min-height:160px;display:flex;flex-direction:column;
 }
-
-.past{
-background:#e0e0e0;
-color:#999;
-pointer-events:none;
-}
-
+.past{background:#e0e0e0;color:#999;pointer-events:none;}
 .slot{
-font-size:.7rem;
-margin-top:4px;
-padding:6px;
-border-radius:6px;
-font-weight:700;
+font-size:.7rem;margin-top:4px;padding:6px;border-radius:6px;font-weight:700;
 }
-
 .available{background:#e8f5e9;color:#2e7d32;}
 .party{background:#fdecea;color:#b71c1c;}
 .business{background:#e3f2fd;color:#0d47a1;}
 .blocked{background:#cfcfcf;color:#555;}
 .pencil{background:#fff3cd;color:#856404;}
-
 .event{
-margin-top:6px;
-padding:6px;
-border-radius:6px;
-font-size:.75rem;
-font-weight:700;
-display:flex;
-justify-content:space-between;
-align-items:center;
+margin-top:6px;padding:6px;border-radius:6px;font-size:.75rem;font-weight:700;
+display:flex;justify-content:space-between;align-items:center;
 }
-
-.event span{cursor:pointer;font-size:.8rem;margin-left:6px;}
+.event span{cursor:pointer;margin-left:6px;}
 </style>
 </head>
 
@@ -154,7 +66,6 @@ align-items:center;
 
 <main>
 
-<!-- ===== FORM ===== -->
 <div class="panel">
 <form id="eventForm">
 <label>Date</label>
@@ -175,13 +86,11 @@ align-items:center;
 <label>Time Slot</label>
 <select id="time"></select>
 
-<textarea id="desc" placeholder="Description (optional)"></textarea>
-
+<textarea id="desc" placeholder="Description"></textarea>
 <button id="submitBtn">Add Event</button>
 </form>
 </div>
 
-<!-- ===== CALENDAR ===== -->
 <div class="panel">
 <div id="calendar-controls">
 <button id="prevMonth">Prev</button>
@@ -204,12 +113,10 @@ const PARTY=[
 
 const toMin=t=>+t.split(":")[0]*60 + +t.split(":")[1];
 const overlap=(a,b,c,d)=>Math.max(a,c)<Math.min(b,d);
-
 const load=()=>JSON.parse(localStorage.getItem("events")||"{}");
 const save=e=>localStorage.setItem("events",JSON.stringify(e));
 
-let current=new Date();
-let editing=null;
+let current=new Date(), editing=null;
 
 function businessSlots(){
 let s=[];
@@ -243,40 +150,28 @@ let today=new Date(); today.setHours(0,0,0,0);
 if(new Date(d)<today) return;
 
 let [st,en]=time.value.split("-");
-let events=load();
-events[d]=events[d]||[];
+let events=load(); events[d]=events[d]||[];
 
 if(editing){
 events[d]=events[d].filter(x=>x.id!==editing);
-editing=null;
-submitBtn.textContent="Add Event";
+editing=null; submitBtn.textContent="Add Event";
 }
 
 if(status.value==="Confirmed"){
 for(let x of events[d]){
 if(x.status==="Confirmed" &&
 overlap(toMin(st),toMin(en),toMin(x.start),toMin(x.end))){
-alert("❌ Time slot blocked.");
+alert("❌ Time slot blocked");
 return;
 }}
 }
 
 events[d].push({
-id:Date.now(),
-start:st,end:en,
-type:type.value,
-status:status.value,
-desc:desc.value
+id:Date.now(),start:st,end:en,type:type.value,status:status.value,desc:desc.value
 });
-
 save(events);
-alert(status.value==="Confirmed"
-? "✅ Event CONFIRMED"
-: "✏️ Pencil booking saved");
-
-eventForm.reset();
-refreshTimes();
-render();
+alert(status.value==="Confirmed"?"✅ Event CONFIRMED":"✏️ Pencil booking saved");
+eventForm.reset(); refreshTimes(); render();
 };
 
 function render(){
@@ -296,26 +191,30 @@ let events=load();
 
 for(let d=1;d<=days;d++){
 let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-let dateObj=new Date(key);
-let past=dateObj<today;
-
+let past=new Date(key)<today;
 let html=`<div class="day ${past?"past":""}"><strong>${d}</strong>`;
 
 PARTY.forEach(p=>{
 let cls="available",lbl="Available";
+
 if(events[key]){
 events[key].forEach(e=>{
-if(e.status==="Confirmed" &&
-overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
+if(overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
+if(e.status==="Confirmed"){
 cls=e.type==="Business"?"blocked":"party";
 lbl=e.type;
+}
+if(e.status==="Pencil"){
+cls="pencil";
+lbl="Pencil Booked";
+}
 }
 });
 }
 html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
 });
 
-if(events[key] && !past){
+if(events[key]&&!past){
 events[key].forEach(e=>{
 html+=`
 <div class="event ${e.status==="Pencil"?"pencil":(e.type==="Business"?"business":"party")}">
@@ -327,7 +226,6 @@ ${e.start}-${e.end} ${e.type}
 </div>`;
 });
 }
-
 html+="</div>";
 calendar.innerHTML+=html;
 }
@@ -335,28 +233,21 @@ calendar.innerHTML+=html;
 
 window.editEvent=(d,id)=>{
 let e=load()[d].find(x=>x.id===id);
-date.value=d;
-type.value=e.type;
-status.value=e.status;
-refreshTimes();
-time.value=`${e.start}-${e.end}`;
-desc.value=e.desc;
-editing=id;
+date.value=d; type.value=e.type; status.value=e.status;
+refreshTimes(); time.value=`${e.start}-${e.end}`;
+desc.value=e.desc; editing=id;
 submitBtn.textContent="Update Event";
 };
 
 window.delEvent=(d,id)=>{
 if(confirm("Delete this event?")){
-let e=load();
-e[d]=e[d].filter(x=>x.id!==id);
-save(e);
-render();
+let e=load(); e[d]=e[d].filter(x=>x.id!==id);
+save(e); render();
 }
 };
 
 prevMonth.onclick=()=>{current.setMonth(current.getMonth()-1);render();}
 nextMonth.onclick=()=>{current.setMonth(current.getMonth()+1);render();}
-
 render();
 </script>
 
