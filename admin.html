@@ -8,96 +8,118 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root { --bg-image: url("mcdo_cover.png"); }
+:root { --bg-image:url("mcdo_cover.png"); }
 
 body{
-    margin:0;
-    font-family:Roboto,sans-serif;
-    background:
-      linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-      var(--bg-image) center/cover no-repeat;
+margin:0;
+font-family:Roboto,sans-serif;
+background:
+linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+var(--bg-image) center/cover no-repeat;
 }
 
 header{
-    background:rgba(0,0,0,.65);
-    color:#fff;
-    padding:16px 30px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+background:rgba(0,0,0,.65);
+color:#fff;
+padding:16px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .home-btn{
-    background:#f2c94c;
-    color:#333;
-    padding:8px 18px;
-    border-radius:20px;
-    text-decoration:none;
-    font-weight:700;
+background:#f2c94c;
+color:#333;
+padding:8px 18px;
+border-radius:20px;
+text-decoration:none;
+font-weight:700;
 }
 
 main{
-    max-width:1200px;
-    margin:25px auto;
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
-    justify-content:center;
+max-width:1200px;
+margin:25px auto;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .panel{
-    background:rgba(255,255,255,.95);
-    padding:22px;
-    border-radius:16px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+background:rgba(255,255,255,.95);
+padding:22px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.form-panel{flex:1 1 350px;max-width:400px;}
+.form-panel{flex:1 1 350px;max-width:420px;}
 .calendar-panel{flex:2 1 600px;}
 
 form{display:flex;flex-direction:column;gap:12px;}
 label{font-weight:700;color:#c62828;}
+
 input,select,textarea{
-    padding:10px;border-radius:8px;border:2px solid #f2c94c;
+padding:10px;
+border-radius:8px;
+border:2px solid #f2c94c;
 }
 
 button{
-    background:#f2c94c;border:none;padding:12px;
-    font-weight:700;border-radius:8px;cursor:pointer;
+background:#f2c94c;
+border:none;
+padding:12px;
+font-weight:700;
+border-radius:8px;
+cursor:pointer;
 }
 
 #calendar{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-    gap:10px;
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:10px;
 }
 
 .day-header{
-    background:#c62828;color:#fff;
-    text-align:center;padding:8px;border-radius:8px;
-    font-weight:700;
+background:#c62828;
+color:#fff;
+text-align:center;
+padding:8px;
+border-radius:8px;
+font-weight:700;
 }
 
 .day{
-    background:#fff;border-radius:12px;
-    padding:8px;min-height:135px;
-    display:flex;flex-direction:column;
+background:#fff;
+border-radius:12px;
+padding:8px;
+min-height:140px;
+display:flex;
+flex-direction:column;
 }
 
 .slot{
-    font-size:.7rem;
-    margin-top:4px;
-    padding:5px;border-radius:6px;
-    font-weight:700;
+font-size:.7rem;
+margin-top:4px;
+padding:5px;
+border-radius:6px;
+font-weight:700;
+position:relative;
 }
 
 .available{background:#e8f5e9;color:#2e7d32;}
 .party{background:#fdecea;color:#b71c1c;}
 .business{background:#e3f2fd;color:#0d47a1;}
 .blocked{background:#cfcfcf;color:#555;}
+.pencil{background:#fff3cd;color:#856404;}
+
+.edit,.delete{
+font-size:.6rem;
+cursor:pointer;
+margin-left:5px;
+}
 
 @media(max-width:992px){
-    main{flex-direction:column;}
+main{flex-direction:column;}
 }
 </style>
 </head>
@@ -105,28 +127,34 @@ button{
 <body>
 
 <header>
-    <div>🍔 MCDONALD'S EDSA CALOOCAN – ADMIN PLANNER</div>
-    <a class="home-btn" href="#">Home</a>
+<div>🍔 MCDONALD'S EDSA CALOOCAN – ADMIN PLANNER</div>
+<a class="home-btn" href="#">Home</a>
 </header>
 
 <main>
 
 <div class="panel form-panel">
 <form id="eventForm">
-    <label>Date</label>
-    <input type="date" id="date" required>
+<label>Date</label>
+<input type="date" id="date" required>
 
-    <label>Event Type</label>
-    <select id="type">
-        <option value="Party">Party (1.5 hrs)</option>
-        <option value="Business">Business Meeting (2 hrs)</option>
-    </select>
+<label>Event Type</label>
+<select id="type">
+<option value="Party">Party (1.5 hrs)</option>
+<option value="Business">Business Meeting (2 hrs)</option>
+</select>
 
-    <label>Time</label>
-    <select id="time"></select>
+<label>Booking Status</label>
+<select id="status">
+<option value="Confirmed">Confirmed</option>
+<option value="Pencil">Pencil Booking</option>
+</select>
 
-    <textarea id="desc" placeholder="Description"></textarea>
-    <button>Add Event</button>
+<label>Time</label>
+<select id="time"></select>
+
+<textarea id="desc" placeholder="Description"></textarea>
+<button id="submitBtn">Add Event</button>
 </form>
 </div>
 
@@ -138,104 +166,158 @@ button{
 
 <script>
 const PARTY_SLOTS=[
- {start:"06:00",end:"07:30"},
- {start:"09:00",end:"10:30"},
- {start:"14:00",end:"15:30"},
- {start:"17:00",end:"18:30"},
- {start:"20:00",end:"21:30"},
+{start:"06:00",end:"07:30"},
+{start:"09:00",end:"10:30"},
+{start:"14:00",end:"15:30"},
+{start:"17:00",end:"18:30"},
+{start:"20:00",end:"21:30"}
 ];
 
-function generateBusinessSlots(){
- let slots=[];
- for(let h=6;h<24;h++){
-   for(let m of [0,30]){
-     let sh=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-     let eh=new Date(`1970-01-01T${sh}:00`);
-     eh.setMinutes(eh.getMinutes()+120);
-     if(eh.getHours()<24 || (eh.getHours()==0 && eh.getMinutes()==0))
-       slots.push({start:sh,end:eh.toTimeString().slice(0,5)});
-   }
- }
- return slots;
+function genBusinessSlots(){
+let s=[];
+for(let h=6;h<24;h++){
+for(let m of [0,30]){
+let sh=`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+let d=new Date(`1970-01-01T${sh}`);
+d.setMinutes(d.getMinutes()+120);
+if(d.getHours()<24||d.getMinutes()==0)
+s.push({start:sh,end:d.toTimeString().slice(0,5)});
+}}
+return s;
 }
 
-function toMin(t){let[a,b]=t.split(":");return +a*60+ +b;}
-function overlap(a,b,c,d){return Math.max(a,c)<Math.min(b,d);}
+const toMin=t=>+t.split(":")[0]*60+ +t.split(":")[1];
+const overlap=(a,b,c,d)=>Math.max(a,c)<Math.min(b,d);
 
-function load(){return JSON.parse(localStorage.getItem("events")||"{}");}
-function save(e){localStorage.setItem("events",JSON.stringify(e));}
+const load=()=>JSON.parse(localStorage.getItem("events")||"{}");
+const save=e=>localStorage.setItem("events",JSON.stringify(e));
+
+let editing=null;
 
 const timeSel=document.getElementById("time");
 const typeSel=document.getElementById("type");
 
 function refreshTimes(){
- timeSel.innerHTML="";
- let slots=typeSel.value==="Party"?PARTY_SLOTS:generateBusinessSlots();
- slots.forEach(s=>{
-   let o=document.createElement("option");
-   o.value=`${s.start}-${s.end}`;
-   o.textContent=`${s.start} – ${s.end}`;
-   timeSel.appendChild(o);
- });
+timeSel.innerHTML="";
+let slots=typeSel.value==="Party"?PARTY_SLOTS:genBusinessSlots();
+slots.forEach(s=>{
+let o=document.createElement("option");
+o.value=`${s.start}-${s.end}`;
+o.textContent=`${s.start} – ${s.end}`;
+timeSel.appendChild(o);
+});
 }
 typeSel.onchange=refreshTimes;
 refreshTimes();
 
-document.getElementById("eventForm").onsubmit=e=>{
- e.preventDefault();
- let d=date.value;
- let [s,eT]=time.value.split("-");
- let type=typeSel.value;
- let ev=load();
- if(!ev[d])ev[d]=[];
+eventForm.onsubmit=e=>{
+e.preventDefault();
+let d=date.value;
+let [s,eT]=time.value.split("-");
+let type=type.value;
+let status=document.getElementById("status").value;
+let ev=load();
+if(!ev[d])ev[d]=[];
 
- let sM=toMin(s), eM=toMin(eT);
+if(editing){
+ev[d]=ev[d].filter(x=>x.id!==editing);
+editing=null;
+submitBtn.textContent="Add Event";
+}
 
- for(let x of ev[d]){
-   if(overlap(sM,eM,toMin(x.start),toMin(x.end))){
-     alert("Time conflict with existing event!");
-     return;
-   }
- }
- ev[d].push({start:s,end:eT,type});
- save(ev);
- render();
- e.target.reset();
- refreshTimes();
+let sM=toMin(s),eM=toMin(eT);
+
+if(status==="Confirmed"){
+for(let x of ev[d]){
+if(x.status==="Confirmed" &&
+overlap(sM,eM,toMin(x.start),toMin(x.end))){
+alert("Time conflict with confirmed event");
+return;
+}}
+}
+
+ev[d].push({
+id:Date.now(),
+start:s,end:eT,type,status,
+desc:desc.value
+});
+
+save(ev);
+eventForm.reset();
+refreshTimes();
+render();
 };
 
 function render(){
- const cal=document.getElementById("calendar");
- cal.innerHTML="";
- let now=new Date();
- let y=now.getFullYear(),m=now.getMonth();
- let days=new Date(y,m+1,0).getDate();
- let start=new Date(y,m,1).getDay();
- ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
-   cal.innerHTML+=`<div class="day-header">${d}</div>`;
- });
- for(let i=0;i<start;i++)cal.innerHTML+=`<div></div>`;
- let ev=load();
+calendar.innerHTML="";
+let now=new Date(),y=now.getFullYear(),m=now.getMonth();
+let days=new Date(y,m+1,0).getDate();
+let start=new Date(y,m,1).getDay();
+["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
+calendar.innerHTML+=`<div class="day-header">${d}</div>`;
+});
+for(let i=0;i<start;i++)calendar.innerHTML+=`<div></div>`;
 
- for(let d=1;d<=days;d++){
-   let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-   let html=`<div class="day"><strong>${d}</strong>`;
-   PARTY_SLOTS.forEach(p=>{
-     let cls="available",lbl="Available";
-     if(ev[key]){
-       ev[key].forEach(e=>{
-         if(overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
-           cls=e.type==="Business"?"blocked":"party";
-           lbl=e.type;
-         }
-       });
-     }
-     html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
-   });
-   html+="</div>";
-   cal.innerHTML+=html;
- }
+let ev=load();
+
+for(let d=1;d<=days;d++){
+let key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+let html=`<div class="day"><strong>${d}</strong>`;
+
+PARTY_SLOTS.forEach(p=>{
+let cls="available",lbl="Available";
+if(ev[key]){
+ev[key].forEach(e=>{
+if(e.status==="Confirmed" &&
+overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
+cls=e.type==="Business"?"blocked":"party";
+lbl=e.type;
 }
+if(e.status==="Pencil"){
+cls="pencil";lbl="Pencil";
+}
+});
+}
+html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
+});
+
+if(ev[key]){
+ev[key].forEach(e=>{
+html+=`<div class="slot ${e.type==="Business"?"business":"party"}">
+${e.start}-${e.end} ${e.type} (${e.status})
+<span class="edit" onclick="editEvent('${key}',${e.id})">✏️</span>
+<span class="delete" onclick="delEvent('${key}',${e.id})">🗑</span>
+</div>`;
+});
+}
+
+html+="</div>";
+calendar.innerHTML+=html;
+}
+}
+
+window.editEvent=(d,id)=>{
+let ev=load();
+let e=ev[d].find(x=>x.id===id);
+date.value=d;
+type.value=e.type;
+status.value=e.status;
+refreshTimes();
+time.value=`${e.start}-${e.end}`;
+desc.value=e.desc;
+editing=id;
+submitBtn.textContent="Update Event";
+};
+
+window.delEvent=(d,id)=>{
+if(confirm("Delete this event?")){
+let ev=load();
+ev[d]=ev[d].filter(x=>x.id!==id);
+save(ev);
+render();
+}
+};
+
 render();
 </script>
 
