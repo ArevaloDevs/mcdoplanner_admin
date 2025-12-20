@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root { --bg-image:url("mcdo_cover.png"); }
+:root{--bg-image:url("mcdo_cover.png");}
 
 body{
 margin:0;
@@ -92,7 +92,7 @@ font-weight:700;
 background:#fff;
 border-radius:12px;
 padding:8px;
-min-height:140px;
+min-height:150px;
 display:flex;
 flex-direction:column;
 }
@@ -100,10 +100,9 @@ flex-direction:column;
 .slot{
 font-size:.7rem;
 margin-top:4px;
-padding:5px;
+padding:6px;
 border-radius:6px;
 font-weight:700;
-position:relative;
 }
 
 .available{background:#e8f5e9;color:#2e7d32;}
@@ -112,10 +111,18 @@ position:relative;
 .blocked{background:#cfcfcf;color:#555;}
 .pencil{background:#fff3cd;color:#856404;}
 
-.edit,.delete{
-font-size:.6rem;
+.event{
+margin-top:6px;
+padding:6px;
+border-radius:6px;
+font-size:.75rem;
+font-weight:700;
+}
+
+.event span{
 cursor:pointer;
-margin-left:5px;
+margin-left:6px;
+font-size:.65rem;
 }
 
 @media(max-width:992px){
@@ -273,9 +280,6 @@ overlap(toMin(p.start),toMin(p.end),toMin(e.start),toMin(e.end))){
 cls=e.type==="Business"?"blocked":"party";
 lbl=e.type;
 }
-if(e.status==="Pencil"){
-cls="pencil";lbl="Pencil";
-}
 });
 }
 html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
@@ -283,10 +287,11 @@ html+=`<div class="slot ${cls}">${p.start}-${p.end} ${lbl}</div>`;
 
 if(ev[key]){
 ev[key].forEach(e=>{
-html+=`<div class="slot ${e.type==="Business"?"business":"party"}">
+html+=`
+<div class="event ${e.status==="Pencil"?"pencil":(e.type==="Business"?"business":"party")}">
 ${e.start}-${e.end} ${e.type} (${e.status})
-<span class="edit" onclick="editEvent('${key}',${e.id})">✏️</span>
-<span class="delete" onclick="delEvent('${key}',${e.id})">🗑</span>
+<span onclick="editEvent('${key}',${e.id})">✏️</span>
+<span onclick="delEvent('${key}',${e.id})">🗑</span>
 </div>`;
 });
 }
